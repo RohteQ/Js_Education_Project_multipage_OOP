@@ -1851,8 +1851,8 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', () => {
   const slider = new _modules_slider__WEBPACK_IMPORTED_MODULE_0__["default"]('.page', '.next');
   slider.render();
-  const player = new _modules_playVideo__WEBPACK_IMPORTED_MODULE_1__["default"]('showup .play', '.overlay');
-  player.play();
+  const player = new _modules_playVideo__WEBPACK_IMPORTED_MODULE_1__["default"]('.showup .play', '.overlay');
+  player.init();
 });
 
 /***/ }),
@@ -1874,12 +1874,45 @@ class VideoPlayer {
     this.close = this.overlay.querySelector('.close');
   }
 
-  play() {
+  bindTriggers() {
     this.btns.forEach(btn => {
       btn.addEventListener('click', () => {
-        console.log('ji');
+        //only when player called already,iframe with id frame replace div with id frame. if player already exist => only show overlay
+        if (document.querySelector('iframe#frame')) {
+          this.overlay.style.display = 'flex';
+        } else {
+          const path = btn.getAttribute('data-url');
+          this.createPlayer(path);
+        }
       });
     });
+  }
+
+  bindCloseBtn() {
+    this.close.addEventListener('click', () => {
+      this.overlay.style.display = 'none';
+      this.player.stopVideo();
+    });
+  } //url from btn
+  //take block with id frame and made player
+
+
+  createPlayer(url) {
+    this.player = new YT.Player('frame', {
+      height: '100%',
+      width: '100%',
+      videoId: `${url}`
+    });
+    this.overlay.style.display = 'flex';
+  }
+
+  init() {
+    let tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    let firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    this.bindTriggers();
+    this.bindCloseBtn();
   }
 
 }
