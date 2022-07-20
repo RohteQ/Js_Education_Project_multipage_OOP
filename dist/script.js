@@ -1844,14 +1844,43 @@ module.exports = g;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/slider */ "./src/js/modules/slider.js");
-/* harmony import */ var _modules_playVideo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/playVideo */ "./src/js/modules/playVideo.js");
+/* harmony import */ var _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/slider/slider-main */ "./src/js/modules/slider/slider-main.js");
+/* harmony import */ var _modules_slider_slider_mini__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/slider/slider-mini */ "./src/js/modules/slider/slider-mini.js");
+/* harmony import */ var _modules_playVideo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/playVideo */ "./src/js/modules/playVideo.js");
+
 
 
 window.addEventListener('DOMContentLoaded', () => {
-  const slider = new _modules_slider__WEBPACK_IMPORTED_MODULE_0__["default"]('.page', '.next');
+  const slider = new _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_0__["default"]({
+    btns: '.next',
+    container: '.page'
+  });
   slider.render();
-  const player = new _modules_playVideo__WEBPACK_IMPORTED_MODULE_1__["default"]('.showup .play', '.overlay');
+  const showUpSlider = new _modules_slider_slider_mini__WEBPACK_IMPORTED_MODULE_1__["default"]({
+    container: '.showup__content-slider',
+    prev: '.showup__prev',
+    next: '.showup__next',
+    activeClass: 'card-active',
+    animate: true
+  });
+  showUpSlider.init();
+  const modulesSlider = new _modules_slider_slider_mini__WEBPACK_IMPORTED_MODULE_1__["default"]({
+    container: '.modules__content-slider',
+    prev: '.modules__info-btns .slick-prev',
+    next: '.modules__info-btns .slick-next',
+    activeClass: 'card-active',
+    animate: true,
+    autoplay: true
+  });
+  modulesSlider.init();
+  const feedSlider = new _modules_slider_slider_mini__WEBPACK_IMPORTED_MODULE_1__["default"]({
+    container: '.feed__slider',
+    prev: '.feed__slider .slick-prev',
+    next: '.feed__slider .slick-next',
+    activeClass: 'feed__item-active'
+  });
+  feedSlider.init();
+  const player = new _modules_playVideo__WEBPACK_IMPORTED_MODULE_2__["default"]('.showup .play', '.overlay');
   player.init();
 });
 
@@ -1919,26 +1948,24 @@ class VideoPlayer {
 
 /***/ }),
 
-/***/ "./src/js/modules/slider.js":
-/*!**********************************!*\
-  !*** ./src/js/modules/slider.js ***!
-  \**********************************/
+/***/ "./src/js/modules/slider/slider-main.js":
+/*!**********************************************!*\
+  !*** ./src/js/modules/slider/slider-main.js ***!
+  \**********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Slider; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MainSlider; });
 /* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
 /* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _slider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./slider */ "./src/js/modules/slider/slider.js");
 
-class Slider {
-  constructor(page, btns) {
-    this.page = document.querySelector(page); //cause our slides are similar => inside page, we use only page's chlidren(slides in page)
 
-    this.slides = this.page.children;
-    this.btns = document.querySelectorAll(btns);
-    this.slideIndex = 1;
+class MainSlider extends _slider__WEBPACK_IMPORTED_MODULE_1__["default"] {
+  constructor(btns) {
+    super(btns);
   }
 
   showSlides(n) {
@@ -2008,6 +2035,170 @@ class Slider {
     }); //run for first initialization  of our slider, we hide all slides,and show only 1 ,which is default
 
     this.showSlides(this.slideIndex); //! this  = we address to methods or properties in EACH EXEMPLAR OF CLASS. for example slideIndex will be own for each slider
+  }
+
+}
+
+/***/ }),
+
+/***/ "./src/js/modules/slider/slider-mini.js":
+/*!**********************************************!*\
+  !*** ./src/js/modules/slider/slider-mini.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MiniSLider; });
+/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
+/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _slider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./slider */ "./src/js/modules/slider/slider.js");
+
+
+class MiniSLider extends _slider__WEBPACK_IMPORTED_MODULE_1__["default"] {
+  constructor(container, next, prev, activeClass, animate, autoplay) {
+    super(container, next, prev, activeClass, animate, autoplay);
+  }
+
+  decorizeSlides() {
+    [...this.slides].forEach(slide => {
+      slide.classList.remove(this.activeClass);
+
+      if (this.animate) {
+        //inside 1st slide found elems
+        slide.querySelector('.card__title').style.opacity = '0.4';
+        slide.querySelector('.card__controls-arrow').style.opacity = '0';
+      }
+    });
+    this.slides[0].classList.add(this.activeClass);
+
+    if (this.animate) {
+      //inside 1st slide found elems
+      this.slides[0].querySelector('.card__title').style.opacity = '1';
+      this.slides[0].querySelector('.card__controls-arrow').style.opacity = '1';
+    }
+
+    if (this.slides[0].closest('button')) {
+      this.slides[0].classList.add(this.activeClass);
+    }
+  }
+
+  nextSlide() {
+    //OR btns always in the end
+    // if (this.prev.parentNode === this.container) {
+    //     this.container.insertBefore(this.slides[0], this.prev);
+    // } else {
+    //     this.container.appendChild(this.slides[0]);
+    // }
+    // this.decorizeSlides();
+    // }
+    //for => removing bug with buttons(cause they are like an slide in page 5)
+    for (let i = 1; i < this.slides.length; i++) {
+      if (this.slides[i].tagName != "BUTTON") {
+        //to the end of elements add 1st element in slider
+        this.container.appendChild(this.slides[0]);
+        this.decorizeSlides();
+        break;
+      } else {
+        this.container.appendChild(this.slides[0]);
+        i--;
+      }
+    }
+  }
+
+  autoPlayGo() {
+    let autoplay = setInterval(() => {
+      this.nextSlide();
+    }, 5000);
+    this.slides[0].parentNode.addEventListener('mouseenter', () => {
+      clearInterval(autoplay);
+    });
+    this.next.addEventListener('mouseenter', () => {
+      clearInterval(autoplay);
+    });
+    this.prev.addEventListener('mouseenter', () => {
+      clearInterval(autoplay);
+    });
+  }
+
+  bindTriggers() {
+    this.next.addEventListener('click', () => {
+      this.nextSlide();
+    });
+    this.prev.addEventListener('click', () => {
+      for (let i = this.slides.length - 1; i > 0; i--) {
+        if (this.slides[i].tagName != "BUTTON") {
+          // this.slides[this.slides.length - 1]  => last slide in list
+          let active = this.slides[i];
+          this.container.insertBefore(active, this.slides[0]);
+          this.decorizeSlides();
+          break;
+        }
+      }
+    });
+  }
+
+  init() {
+    this.container.style.cssText = `
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden ;
+        align-item: flex-start;
+        `;
+    this.bindTriggers();
+    this.decorizeSlides();
+
+    if (this.autoplay) {
+      this.autoPlayGo();
+      this.slides[0].parentNode.addEventListener('mouseleave', () => {
+        this.autoPlayGo();
+      });
+      this.next.addEventListener('mouseleave', () => {
+        this.autoPlayGo();
+      });
+      this.prev.addEventListener('mouseleave', () => {
+        this.autoPlayGo();
+      });
+    }
+  }
+
+}
+
+/***/ }),
+
+/***/ "./src/js/modules/slider/slider.js":
+/*!*****************************************!*\
+  !*** ./src/js/modules/slider/slider.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Slider; });
+class Slider {
+  //include only common for all sliders
+  //destructurization,   if 1st part wasnt transfered  it replaced by clear obj
+  constructor({
+    container = null,
+    btns = null,
+    next = null,
+    prev = null,
+    activeClass = '',
+    animate = false,
+    autoplay = false
+  } = {}) {
+    this.container = document.querySelector(container); //cause our slides are similar => inside page, we use only page's chlidren(slides in page)
+
+    this.slides = this.container.children;
+    this.btns = document.querySelectorAll(btns);
+    this.prev = document.querySelector(prev);
+    this.next = document.querySelector(next);
+    this.activeClass = activeClass;
+    this.animate = animate;
+    this.autoplay = autoplay;
+    this.slideIndex = 1;
   }
 
 }
