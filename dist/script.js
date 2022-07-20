@@ -1847,6 +1847,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/slider/slider-main */ "./src/js/modules/slider/slider-main.js");
 /* harmony import */ var _modules_slider_slider_mini__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/slider/slider-mini */ "./src/js/modules/slider/slider-mini.js");
 /* harmony import */ var _modules_playVideo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/playVideo */ "./src/js/modules/playVideo.js");
+/* harmony import */ var _modules_diference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/diference */ "./src/js/modules/diference.js");
+
 
 
 
@@ -1881,8 +1883,66 @@ window.addEventListener('DOMContentLoaded', () => {
   });
   feedSlider.init();
   const player = new _modules_playVideo__WEBPACK_IMPORTED_MODULE_2__["default"]('.showup .play', '.overlay');
-  player.init();
+  player.init(); //alt call
+
+  new _modules_diference__WEBPACK_IMPORTED_MODULE_3__["default"]('.officerold', '.officernew', '.officer__card-item').init();
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/diference.js":
+/*!*************************************!*\
+  !*** ./src/js/modules/diference.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Diference; });
+class Diference {
+  constructor(oldOfficer, newOfficer, items) {
+    this.oldOfficer = document.querySelector(oldOfficer);
+    this.newOfficer = document.querySelector(newOfficer);
+    this.oldItems = this.oldOfficer.querySelectorAll(items);
+    this.newItems = this.newOfficer.querySelectorAll(items);
+    this.items = items;
+    this.oldCounter = 0;
+    this.newCounter = 0;
+  }
+
+  bindTriggers(container, items, counter) {
+    container.querySelector('.plus').addEventListener('click', () => {
+      if (counter != items.length - 2) {
+        items[counter].style.display = 'flex';
+        counter++;
+      } else {
+        //if we on the last card which we need to show ,we showed it and deleting last block            
+        items[counter].style.display = 'flex';
+        items[items.length - 1].remove();
+      }
+    });
+  }
+
+  hideItems(items) {
+    //item = every elem in pseudo massive, i  number in order, arr= link,on the massive we sorting out. (this.oldOfficer.querySelectorAll(this.items))
+    //need it,cause we need to be possible to keep our last element( it named liked another items)
+    items.forEach((item, i, arr) => {
+      //elem of massive != last in this node collection
+      if (i !== arr.length - 1) {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  init() {
+    this.hideItems(this.oldItems);
+    this.hideItems(this.newItems);
+    this.bindTriggers(this.newOfficer, this.newItems, this.newCounter);
+    this.bindTriggers(this.oldOfficer, this.oldItems, this.oldCounter);
+  }
+
+}
 
 /***/ }),
 
