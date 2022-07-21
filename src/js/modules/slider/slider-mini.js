@@ -91,6 +91,7 @@ export default class MiniSLider extends Slider {
 
 
     init() {
+        try{
         this.container.style.cssText = `
         display: flex;
         flex-wrap: wrap;
@@ -111,6 +112,7 @@ export default class MiniSLider extends Slider {
                 this.autoPlayGo();
             });
         }
+        }catch(e){}
     }
    
 

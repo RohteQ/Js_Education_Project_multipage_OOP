@@ -6,8 +6,21 @@ import Form from './modules/forms';
 
 
 window.addEventListener('DOMContentLoaded', () => {
-    const slider = new MainSlider({btns: '.next', container: '.page'});
+    const slider = new MainSlider({
+        btns: '.next', 
+        container: '.page'
+    });
     slider.render();
+
+    //working with 2d page
+    //its ok,but in console errors.cause when we create slider and then create modulePageSlider, havent container '.page' on the 2d page but script trying use inside .page
+    const modulePageSlider = new MainSlider({
+        container: '.moduleapp', 
+        btns: '.next', 
+        prev: '.prevmodule', 
+        next: '.nextmodule'
+    });
+    modulePageSlider.render();
 
     const showUpSlider = new MiniSLider ({
         container : '.showup__content-slider',

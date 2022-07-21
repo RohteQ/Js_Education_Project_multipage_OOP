@@ -1,8 +1,8 @@
 import Slider from "./slider";
 
 export default class MainSlider extends Slider {
-    constructor(btns) {
-        super(btns);
+    constructor(btns, nextModule, prevModule) {
+        super(btns, nextModule, prevModule);
     }
 
     showSlides(n) {
@@ -46,15 +46,7 @@ export default class MainSlider extends Slider {
         this.showSlides(this.slideIndex += n);
     }
 
-    render() {
-        //3 sec and show card(page 3)
-        try {
-            this.hanson = document.querySelector('.hanson');
-        } catch(e) {}
-        
-
-
-
+    bindTriggers(){
         this.btns.forEach(btn => {
             btn.addEventListener('click', () => {
                 this.plusSlides(1);
@@ -63,7 +55,6 @@ export default class MainSlider extends Slider {
                     this.slides[this.slideIndex - 1].classList.remove('fadeIn');
                 }); 
             });
-
             //when click on logo => 1 slide
             btn.parentNode.previousElementSibling.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -75,11 +66,44 @@ export default class MainSlider extends Slider {
                     this.slides[this.slideIndex - 1].classList.remove('fadeIn');
                 });
             });
-
         });
+        this.prev.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                //-1 cause on 1 module back in slider
+                e.preventDefault();
+                e.stopPropagation();
+                this.plusSlides(-1);
+                this.showSlides(this.slideIndex);
+                this.slides[this.slideIndex - 1].classList.add('fadeIn');
+                this.slides[this.slideIndex - 1].addEventListener('animationend', () => {
+                    this.slides[this.slideIndex - 1].classList.remove('fadeIn');
+                });
+            });
+        });
+        this.next.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.plusSlides(1);
+                this.slides[this.slideIndex - 1].classList.add('fadeIn');
+                this.slides[this.slideIndex - 1].addEventListener('animationend', () => {
+                    this.slides[this.slideIndex - 1].classList.remove('fadeIn');
+                });
+            });
+        });
+    }
+
+    render() {
+        //3 sec and show card(page 3)
+        //to fix the bug with undefinded objects on 2d page' slider
+        if (this.container){
+        try {
+            this.hanson = document.querySelector('.hanson');
+        } catch(e) {}
         //run for first initialization  of our slider, we hide all slides,and show only 1 ,which is default
         this.showSlides(this.slideIndex);
-
+        this.bindTriggers();
+        }
         //! this  = we address to methods or properties in EACH EXEMPLAR OF CLASS. for example slideIndex will be own for each slider
     }
 }

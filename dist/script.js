@@ -2294,7 +2294,16 @@ window.addEventListener('DOMContentLoaded', () => {
     btns: '.next',
     container: '.page'
   });
-  slider.render();
+  slider.render(); //working with 2d page
+  //its ok,but in console errors.cause when we create slider and then create modulePageSlider, havent container '.page' on the 2d page but script trying use inside .page
+
+  const modulePageSlider = new _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_0__["default"]({
+    container: '.moduleapp',
+    btns: '.next',
+    prev: '.prevmodule',
+    next: '.nextmodule'
+  });
+  modulePageSlider.render();
   const showUpSlider = new _modules_slider_slider_mini__WEBPACK_IMPORTED_MODULE_1__["default"]({
     container: '.showup__content-slider',
     prev: '.showup__prev',
@@ -2340,13 +2349,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Diference; });
 class Diference {
   constructor(oldOfficer, newOfficer, items) {
-    this.oldOfficer = document.querySelector(oldOfficer);
-    this.newOfficer = document.querySelector(newOfficer);
-    this.oldItems = this.oldOfficer.querySelectorAll(items);
-    this.newItems = this.newOfficer.querySelectorAll(items);
-    this.items = items;
-    this.oldCounter = 0;
-    this.newCounter = 0;
+    try {
+      this.oldOfficer = document.querySelector(oldOfficer);
+      this.newOfficer = document.querySelector(newOfficer);
+      this.oldItems = this.oldOfficer.querySelectorAll(items);
+      this.newItems = this.newOfficer.querySelectorAll(items);
+      this.items = items;
+      this.oldCounter = 0;
+      this.newCounter = 0;
+    } catch (e) {}
   }
 
   bindTriggers(container, items, counter) {
@@ -2374,10 +2385,12 @@ class Diference {
   }
 
   init() {
-    this.hideItems(this.oldItems);
-    this.hideItems(this.newItems);
-    this.bindTriggers(this.newOfficer, this.newItems, this.newCounter);
-    this.bindTriggers(this.oldOfficer, this.oldItems, this.oldCounter);
+    try {
+      this.hideItems(this.oldItems);
+      this.hideItems(this.newItems);
+      this.bindTriggers(this.newOfficer, this.newItems, this.newCounter);
+      this.bindTriggers(this.oldOfficer, this.oldItems, this.oldCounter);
+    } catch (e) {}
   }
 
 }
@@ -2461,7 +2474,7 @@ class Form {
         return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? '' : a;
       });
 
-      if (this.value.charAt(1) != '7') {
+      if (this.value.charAt(1) != '1') {
         this.value = '';
         this.blur();
       }
@@ -2479,7 +2492,7 @@ class Form {
     inputs.forEach(input => {
       input.addEventListener('input', createMask);
       input.addEventListener('focus', createMask);
-      input.addEventListener('focus', createMask);
+      input.addEventListener('blur', createMask);
     });
   }
 
@@ -2604,8 +2617,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class MainSlider extends _slider__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor(btns) {
-    super(btns);
+  constructor(btns, nextModule, prevModule) {
+    super(btns, nextModule, prevModule);
   }
 
   showSlides(n) {
@@ -2647,12 +2660,7 @@ class MainSlider extends _slider__WEBPACK_IMPORTED_MODULE_1__["default"] {
     this.showSlides(this.slideIndex += n);
   }
 
-  render() {
-    //3 sec and show card(page 3)
-    try {
-      this.hanson = document.querySelector('.hanson');
-    } catch (e) {}
-
+  bindTriggers() {
     this.btns.forEach(btn => {
       btn.addEventListener('click', () => {
         this.plusSlides(1);
@@ -2672,9 +2680,46 @@ class MainSlider extends _slider__WEBPACK_IMPORTED_MODULE_1__["default"] {
           this.slides[this.slideIndex - 1].classList.remove('fadeIn');
         });
       });
-    }); //run for first initialization  of our slider, we hide all slides,and show only 1 ,which is default
+    });
+    this.prev.forEach(btn => {
+      btn.addEventListener('click', e => {
+        //-1 cause on 1 module back in slider
+        e.preventDefault();
+        e.stopPropagation();
+        this.plusSlides(-1);
+        this.showSlides(this.slideIndex);
+        this.slides[this.slideIndex - 1].classList.add('fadeIn');
+        this.slides[this.slideIndex - 1].addEventListener('animationend', () => {
+          this.slides[this.slideIndex - 1].classList.remove('fadeIn');
+        });
+      });
+    });
+    this.next.forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.plusSlides(1);
+        this.slides[this.slideIndex - 1].classList.add('fadeIn');
+        this.slides[this.slideIndex - 1].addEventListener('animationend', () => {
+          this.slides[this.slideIndex - 1].classList.remove('fadeIn');
+        });
+      });
+    });
+  }
 
-    this.showSlides(this.slideIndex); //! this  = we address to methods or properties in EACH EXEMPLAR OF CLASS. for example slideIndex will be own for each slider
+  render() {
+    //3 sec and show card(page 3)
+    //to fix the bug with undefinded objects on 2d page' slider
+    if (this.container) {
+      try {
+        this.hanson = document.querySelector('.hanson');
+      } catch (e) {} //run for first initialization  of our slider, we hide all slides,and show only 1 ,which is default
+
+
+      this.showSlides(this.slideIndex);
+      this.bindTriggers();
+    } //! this  = we address to methods or properties in EACH EXEMPLAR OF CLASS. for example slideIndex will be own for each slider
+
   }
 
 }
@@ -2780,27 +2825,29 @@ class MiniSLider extends _slider__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
 
   init() {
-    this.container.style.cssText = `
+    try {
+      this.container.style.cssText = `
         display: flex;
         flex-wrap: wrap;
         overflow: hidden ;
         align-item: flex-start;
         `;
-    this.bindTriggers();
-    this.decorizeSlides();
+      this.bindTriggers();
+      this.decorizeSlides();
 
-    if (this.autoplay) {
-      this.autoPlayGo();
-      this.slides[0].parentNode.addEventListener('mouseleave', () => {
+      if (this.autoplay) {
         this.autoPlayGo();
-      });
-      this.next.addEventListener('mouseleave', () => {
-        this.autoPlayGo();
-      });
-      this.prev.addEventListener('mouseleave', () => {
-        this.autoPlayGo();
-      });
-    }
+        this.slides[0].parentNode.addEventListener('mouseleave', () => {
+          this.autoPlayGo();
+        });
+        this.next.addEventListener('mouseleave', () => {
+          this.autoPlayGo();
+        });
+        this.prev.addEventListener('mouseleave', () => {
+          this.autoPlayGo();
+        });
+      }
+    } catch (e) {}
   }
 
 }
@@ -2831,10 +2878,13 @@ class Slider {
   } = {}) {
     this.container = document.querySelector(container); //cause our slides are similar => inside page, we use only page's chlidren(slides in page)
 
-    this.slides = this.container.children;
+    try {
+      this.slides = this.container.children;
+    } catch (e) {}
+
     this.btns = document.querySelectorAll(btns);
-    this.prev = document.querySelector(prev);
-    this.next = document.querySelector(next);
+    this.prev = document.querySelectorAll(prev);
+    this.next = document.querySelectorAll(next);
     this.activeClass = activeClass;
     this.animate = animate;
     this.autoplay = autoplay;
