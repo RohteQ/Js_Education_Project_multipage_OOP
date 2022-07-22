@@ -1,8 +1,8 @@
 import Slider from "./slider";
 
 export default class MainSlider extends Slider {
-    constructor(btns, nextModule, prevModule) {
-        super(btns, nextModule, prevModule);
+    constructor(btns, prev, next) {
+        super(btns, prev, next);
     }
 
     showSlides(n) {
@@ -47,6 +47,7 @@ export default class MainSlider extends Slider {
     }
 
     bindTriggers(){
+       
         this.btns.forEach(btn => {
             btn.addEventListener('click', () => {
                 this.plusSlides(1);
@@ -67,7 +68,7 @@ export default class MainSlider extends Slider {
                 });
             });
         });
-        this.prev.forEach(btn => {
+       this.prev.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 //-1 cause on 1 module back in slider
                 e.preventDefault();
@@ -84,7 +85,7 @@ export default class MainSlider extends Slider {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                this.plusSlides(1);
+                this.plusSlides(1);         
                 this.slides[this.slideIndex - 1].classList.add('fadeIn');
                 this.slides[this.slideIndex - 1].addEventListener('animationend', () => {
                     this.slides[this.slideIndex - 1].classList.remove('fadeIn');

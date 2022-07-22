@@ -17,8 +17,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const modulePageSlider = new MainSlider({
         container: '.moduleapp', 
         btns: '.next', 
-        prev: '.prevmodule', 
-        next: '.nextmodule'
+        prev: '.prev', 
+        next: '.next    '
     });
     modulePageSlider.render();
 
@@ -32,8 +32,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     showUpSlider.init();
+   console.log(showUpSlider.init());
 
-    const modulesSlider = new MiniSLider ( {
+    const modulesSlider = new MiniSLider ({
         container : '.modules__content-slider',
         prev : '.modules__info-btns .slick-prev',
         next : '.modules__info-btns .slick-next',
@@ -43,8 +44,9 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     modulesSlider.init();
+    console.log(modulesSlider.init());
 
-    const feedSlider = new MiniSLider ( {
+    const feedSlider = new MiniSLider ({
         container : '.feed__slider',
         prev : '.feed__slider .slick-prev',
         next : '.feed__slider .slick-next',
@@ -54,8 +56,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     feedSlider.init();
 
-    const player = new VideoPlayer('.showup .play', '.overlay');
-    player.init();
+     new VideoPlayer('.showup .play', '.overlay').init();
+     new VideoPlayer('.module__video-item .play', '.overlay').init();
     
    //alt call
    new Diference('.officerold', '.officernew', '.officer__card-item').init();

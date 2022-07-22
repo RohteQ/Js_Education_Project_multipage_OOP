@@ -114,7 +114,4 @@ export default class MiniSLider extends Slider {
         }
         }catch(e){}
     }
-   
-
-    
 }
