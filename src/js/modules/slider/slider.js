@@ -9,7 +9,7 @@ export default class Slider {
          prev = null,
          activeClass = '',
          animate = false,
-         autoplay = false} = {}) {
+         autoplay } = {}) {
         this.container = document.querySelector(container);
         //cause our slides are similar => inside page, we use only page's chlidren(slides in page)
         try {
@@ -21,7 +21,6 @@ export default class Slider {
         this.activeClass = activeClass;
         this.animate = animate;
         this.autoplay = autoplay;  
-        this.slideIndex = 1;
-
+        this.slideIndex = 1;    
     }
 }

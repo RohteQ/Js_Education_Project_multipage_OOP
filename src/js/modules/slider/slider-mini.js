@@ -5,6 +5,7 @@ export default class MiniSLider extends Slider {
         super(container, next, prev, activeClass, animate, autoplay);
     }
 
+    
     decorizeSlides() {
         [...this.slides].forEach(slide => {
             slide.classList.remove(this.activeClass); 
@@ -60,10 +61,10 @@ export default class MiniSLider extends Slider {
         this.slides[0].parentNode.addEventListener('mouseenter', () => {
             clearInterval(autoplay);
         });
-        this.next.addEventListener('mouseenter', () => {
+        this.next[0].addEventListener('mouseenter', () => {
             clearInterval(autoplay);
         });
-        this.prev.addEventListener('mouseenter', () => {
+        this.prev[0].addEventListener('mouseenter', () => {
             clearInterval(autoplay);
         });
     }
@@ -71,10 +72,10 @@ export default class MiniSLider extends Slider {
 
 
     bindTriggers() {
-        this.next.addEventListener('click', () => {
+        this.next[0].addEventListener('click', () => {
             this.nextSlide();
         });
-        this.prev.addEventListener('click', () => {
+        this.prev[0].addEventListener('click', () => {
             for (let i = this.slides.length - 1; i > 0; i--) {
                 if (this.slides[i].tagName != "BUTTON") {
                 // this.slides[this.slides.length - 1]  => last slide in list
@@ -90,7 +91,7 @@ export default class MiniSLider extends Slider {
 
 
 
-    init() {
+    render() {
         try{
         this.container.style.cssText = `
         display: flex;
@@ -105,13 +106,13 @@ export default class MiniSLider extends Slider {
             this.slides[0].parentNode.addEventListener('mouseleave', () => {
                 this.autoPlayGo();
             });
-            this.next.addEventListener('mouseleave', () => {
+            this.next[0].addEventListener('mouseleave', () => {
                 this.autoPlayGo();
             });
-            this.prev.addEventListener('mouseleave', () => {
+            this.prev[0].addEventListener('mouseleave', () => {
                 this.autoPlayGo();
             });
-        }
-        }catch(e){}
+         }
+       }catch(e){}
     }
 }

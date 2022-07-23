@@ -3,6 +3,8 @@ import MiniSLider from './modules/slider/slider-mini';
 import VideoPlayer from './modules/playVideo';
 import Diference from './modules/diference';
 import Form from './modules/forms';
+import ShowInfo from './modules/showInfo';
+import Download from './modules/download';
 
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -16,9 +18,8 @@ window.addEventListener('DOMContentLoaded', () => {
     //its ok,but in console errors.cause when we create slider and then create modulePageSlider, havent container '.page' on the 2d page but script trying use inside .page
     const modulePageSlider = new MainSlider({
         container: '.moduleapp', 
-        btns: '.next', 
         prev: '.prev', 
-        next: '.next    '
+        next: '.next'
     });
     modulePageSlider.render();
 
@@ -31,8 +32,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    showUpSlider.init();
-   console.log(showUpSlider.init());
+    showUpSlider.render();
 
     const modulesSlider = new MiniSLider ({
         container : '.modules__content-slider',
@@ -43,8 +43,7 @@ window.addEventListener('DOMContentLoaded', () => {
         autoplay: true
     });
 
-    modulesSlider.init();
-    console.log(modulesSlider.init());
+    modulesSlider.render();
 
     const feedSlider = new MiniSLider ({
         container : '.feed__slider',
@@ -54,7 +53,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     
 
-    feedSlider.init();
+    feedSlider.render();
 
      new VideoPlayer('.showup .play', '.overlay').init();
      new VideoPlayer('.module__video-item .play', '.overlay').init();
@@ -62,4 +61,11 @@ window.addEventListener('DOMContentLoaded', () => {
    //alt call
    new Diference('.officerold', '.officernew', '.officer__card-item').init();
    new Form(".form").init();
+
+
+   new ShowInfo('.plus__content').init();
+
+
+   new Download('.download').init();
+   
 });
